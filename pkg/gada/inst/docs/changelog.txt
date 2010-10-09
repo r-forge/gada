@@ -1,0 +1,11 @@
+v0.8-5
+2010-03-10
+- changed: Diaz-Uriarte's comments
+
+2009-12-10  (v0.8-0)
+ # VERSION SUBMITTED TO BMC BIOINFORMATICS
+
+
+
+
+
