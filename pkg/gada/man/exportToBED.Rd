@@ -14,16 +14,16 @@ exportToBED(x, num=300, strand="+", col.gain="0,255,255", col.loss="255,0,0", fi
 
 \arguments{
   \item{x}{An object of class 'summaryparGADA'}
-  \item{num}{}
-  \item{strand}{}
-  \item{col.gain}{}
-  \item{col.loss}{}
+  \item{num}{Unused score value default}
+  \item{strand}{Unused strand value default}
+  \item{col.gain}{RGB color for gains}
+  \item{col.loss}{RGB color for loss}
   \item{file}{The name of the file to be saved. The default is 'BED.txt'}
 }
 
 
 \value{
- No return value, just a file 
+ No return value, a file is written to the disk. 
 }
 
 \references{ 

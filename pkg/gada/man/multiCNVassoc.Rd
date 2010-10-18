@@ -17,10 +17,10 @@ multiCNVassoc(x, formula, ...)
 }
 
 \arguments{
-  \item{x}{}
-  \item{formula}{}
-  \item{map}{}
-  \item{\dots}{}
+  \item{x}{TBD}
+  \item{formula}{TBD}
+  \item{map}{TBD}
+  \item{\dots}{TBD}
 }
 
 \details{

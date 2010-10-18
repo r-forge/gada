@@ -8,19 +8,18 @@ Genome Alteration Detection Algorithm (GADA)
 }
 
 \description{
-This package implements 
-a flexible and efficient pipeline to detect copy number alterations from microarray data
-(Pique-Regi R and Gonzalez JR, 2008).
-The package can import the raw copy number normalized intensities provided by
-Illumina BeadStudio, the Affymetrix powertools, or any similar format. 
-Probes belonging to different samples are split into separate files and can be analyzed in parallel 
-in a cluster/multicore computer. 
-The speed and accuracy of the genome alteration detection analysis (GADA) approach 
-combined with parallel computing results in one of the fastest and most accurate methods, 
-and it is  specially suitable to extract CNA on new genomewide scans involving
-hundreds of samples and high density arrays with millions of markers.
-The package also provides some functions for summarizing and visualizing 
-regions altered at chromosome level (including cytobands).
+  This package implements a flexible and efficient pipeline to detect copy number alterations from microarray data
+  (Pique-Regi R and Gonzalez JR, 2008).
+  The package can import the raw copy number normalized intensities provided by
+  Illumina BeadStudio, the Affymetrix powertools, or any similar format. 
+  Probes belonging to different samples are split into separate files and can be analyzed in parallel 
+  in a cluster/multicore computer. 
+  The speed and accuracy of the genome alteration detection analysis (GADA) approach 
+  combined with parallel computing results in one of the fastest and most accurate methods, 
+  and it is  specially suitable to extract CNA on new genomewide scans involving
+  hundreds of samples and high density arrays with millions of markers.
+  The package also provides some functions for summarizing and visualizing 
+  regions altered at chromosome level (including cytobands).
 }
 
 \details{
@@ -56,8 +55,9 @@ Pique-Regi R, Monso-Varona J,Ortega A, Seeger RC, Triche TJ, Asgharzadeh S. "Spa
 \keyword{ package }
 
 \seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+  \code{\link{setupGADAgeneral}}, \code{\link{setupGADAIllumina}},
+  \code{\link{SBL}}, \code{\link{BackwardElimination}},
+  \code{\link{plotRatio}}
 }
 
 \examples{
