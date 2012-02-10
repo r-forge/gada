@@ -21,7 +21,11 @@ rankVariables,
 getNamesProbes,
 dudi.acm.fortran,
 multiCNVassoc,
-getPvalBH
+getPvalBH,
+sortPopData,
+reduceMatrix,
+getChromosomeDat,
+getReducedData
 )
 
 
@@ -39,6 +43,7 @@ S3method(plot,summaryParGADA)
 
 S3method(summary,BackwardElimination)
 S3method(summary,parGADA)
+S3method(summary,list)
 
 S3method(labels,parGADA)
 S3method(labels,summaryParGADA)

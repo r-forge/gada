@@ -1,5 +1,5 @@
 setupGADAIllumina <-
-function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, sort=TRUE, orderProbes, saveGenInfo=TRUE)
+function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, XY=TRUE, sort=TRUE, orderProbes, saveGenInfo=TRUE)
  {
  
     if (missing(log2ratioCol))
@@ -28,12 +28,21 @@ function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, 
     if (!sort)
      {
       x[,ChrNameCol][x[,ChrNameCol]=="XY"]<-"X"
-      chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+      if (XY)
+       {
+        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+       }
+      else
+       {
+        x[,ChrNameCol][x[,ChrNameCol]=="23"]<-"X"
+        x[,ChrNameCol][x[,ChrNameCol]=="24"]<-"Y"
+        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+       }
 
       temp<-data.frame(probe=x[,MarkerIdCol],chr=chr,pos=as.numeric(x[,ChrPosCol]),stringsAsFactors=FALSE)
 
-# Mitocondrial
-      mito<-is.na(temp$chr)
+# Mitocondrial (or missing)
+      mito<-is.na(temp$chr) | is.na(temp$pos)
       temp2<-temp[!mito,] 
 
       ans$log.ratio<-as.numeric(x[!mito,log2ratioCol])
@@ -43,7 +52,17 @@ function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, 
     else  # if sort
      {
       x[,ChrNameCol][x[,ChrNameCol]=="XY"]<-"X"
-      chr<-factor(x[, ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+      if (XY)
+       {
+        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+       }
+      else
+       {
+        x[,ChrNameCol][x[,ChrNameCol]=="23"]<-"X"
+        x[,ChrNameCol][x[,ChrNameCol]=="24"]<-"Y"
+        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+       }
+
       pos<-as.numeric(x[, ChrPosCol])
       if (missing(orderProbes))
        o<-order(chr,pos)
@@ -53,7 +72,7 @@ function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, 
       temp<-data.frame(probe=x[o,MarkerIdCol],chr=chr[o],pos=pos[o],stringsAsFactors=FALSE)
 
 # Mitocondrial
-      mito<-is.na(temp$chr)
+      mito<-is.na(temp$chr) | is.na(temp$pos)
       temp2<-temp[!mito,] 
 
       aux<-as.numeric(x[o,log2ratioCol]) 

@@ -26,8 +26,11 @@ get.matrix<-function(crom.data, probe.pos, verbose,size.min=500,size.max=1.e6){
           g.ind<-get.index(pos,probe.pos)
 
           state<-crom.data[[sub]]$State[prob]
-  
-          #loop over indexes within each probe
+ 
+# POS<<-pos
+# PROBE<<-probe.pos 
+ 
+                   #loop over indexes within each probe
           for(ind in g.ind[1]:g.ind[2])
            {
               if (size.probe>=size.min & size.probe<= size.max)

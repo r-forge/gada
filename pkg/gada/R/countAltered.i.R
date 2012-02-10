@@ -1,23 +1,27 @@
-countAltered.i<-function(i, x, max.number.cnv, length.base, gen.info)
+countAltered.i<-function(i, x, max.number.cnv, length.base, gen.info, chr.lab)
  {
 
-  chr<-c(1:22,"X","Y")
+  chr<-chr.lab
   selec<-c(1:length(chr))[chr==i]
 
   xx<-x[[selec]]
-  chr.sel<-gen.info[gen.info$chr==i & !is.na(gen.info$chr),]
+
+  if (i!=0)
+   chr.sel<-gen.info[gen.info$chr==i & !is.na(gen.info$chr),]
+  else
+   chr.sel<-NULL
    
 
-  extract.probe<-function(j,x,a,seg,max.number.cnv)
+extract.probe<-function(j,x,a,seg,max.number.cnv)
    {
-    xx<-x[[j]]
-    if (NROW(xx)>0)
+    xsel<-x[[j]]
+    if (NROW(xsel)>0)
      {
-      tt<-xx[,2]-xx[,1]
+      tt<-xsel[,2]-xsel[,1]
       cond<-tt>length.base[1] & tt<length.base[2]
-      xx<-xx[c(1:nrow(xx))[cond],]
+      xsel<-xsel[c(1:nrow(xsel))[cond],]
 
-      altered<-xx[xx[,6]==seg, ]
+      altered<-xsel[xsel[,6]==seg, ]
 
       probes<-NULL
 
@@ -25,7 +29,12 @@ countAltered.i<-function(i, x, max.number.cnv, length.base, gen.info)
       {
        for (i in 1:nrow(altered))
         {
-         probes.i<-a[a$pos>=altered[i,1] & a$pos<=altered[i,2],1]
+         if (!is.null(a)) {
+           probes.i<-a[a$pos>=altered[i,1] & a$pos<=altered[i,2],1]
+          }
+         else {
+           probes.i<-altered[i,1]
+          }
          probes<-c(probes,probes.i)
         }
       }
@@ -38,19 +47,20 @@ countAltered.i<-function(i, x, max.number.cnv, length.base, gen.info)
      {
       probes<-NA
      } 
-
     probes
-
    }
 
-   probes.gain<-lapply(1:length(xx),extract.probe,x=xx,a=chr.sel,seg=1,max.number.cnv=max.number.cnv)
-   probes.lose<-lapply(1:length(xx),extract.probe,x=xx,a=chr.sel,seg=-1,max.number.cnv=max.number.cnv)
+   probes.gain <- lapply(1:length(xx), extract.probe, x=xx, a=chr.sel, seg=1, max.number.cnv=max.number.cnv)
+   probes.lose <- lapply(1:length(xx), extract.probe, x=xx, a=chr.sel, seg=-1, max.number.cnv=max.number.cnv)
 
    if (any(!unlist(lapply(probes.gain,is.na))))
     {
      gains<-data.frame(table(unlist(probes.gain)))
      colnames(gains)[1]<-"probe"
-     gains.all<-merge(gains,chr.sel)
+     if (!is.null(chr.sel))
+      gains.all<-merge(gains,chr.sel)
+     else
+      gains.all<-gains
     }
    else
     {
@@ -61,16 +71,15 @@ countAltered.i<-function(i, x, max.number.cnv, length.base, gen.info)
     {
      losses<-data.frame(table(unlist(probes.lose)))
      colnames(losses)[1]<-"probe"
-     losses.all<-merge(losses,chr.sel)
+     if (!is.null(chr.sel))
+      losses.all<-merge(losses,chr.sel)
+     else
+      losses.all<-losses
     }
    else 
     {
      losses.all<-NULL
     }
-     
-
-
-
 
    ans<-list(gains=gains.all, losses=losses.all)
 

@@ -3,8 +3,6 @@ plot.summaryParGADA<-function(x, chr, max.number.cnv=100, length.base=c(500,1e6)
   
   require(plotrix)
   data(genomicInfo)
-
-
   
   if (!inherits(x, "summaryParGADA"))
    stop("object must be of class 'summaryParGADA' ")
@@ -12,17 +10,33 @@ plot.summaryParGADA<-function(x, chr, max.number.cnv=100, length.base=c(500,1e6)
   mypalette.blue<-c("#EFF3FF", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594")
   mypalette.red<-c("#FFF5F0", "#FEE0D2", "#FCBBA1", "#FC9272", "#FB6A4A", "#EF3B2C", "#CB181D", "#A50F15", "#67000D")
 
-  load("SBL/gen.info.Rdata")
+  if (chr!=0)
+   load("SBL/gen.info.Rdata")
 
-  
-  selec<-c(1:length(chromosomes))[chromosomes==chr]
+  if (chr!=0)
+   selec<-c(1:length(chromosomes))[chromosomes==chr]
+  else
+   selec<-1
+
   out<-x[[selec]]
-  select<-gen.info$chr==chr
-  pos<-gen.info[select,3]
+  if (chr!=0)
+   {
+    select<-gen.info$chr==chr
+    pos<-gen.info[select,3]
+    pos.all<-gen.info[,3]
+   }
+  else
+   {
+    Info<-attr(x, "Info")
+    nProbes<-max(Info[[1]]$EndProbe)
+    pos<-1:nProbes
+    pos.all<-1:nProbes
+   }
+
   limits<-range(pos, na.rm=TRUE, finite=TRUE)
   prob.ini<-pos[1]
 
-  pos.all<-gen.info[,3]
+  
 
   old.mar <- par("mar")
   old.mfrow <- par("mfrow")
@@ -33,7 +47,17 @@ plot.summaryParGADA<-function(x, chr, max.number.cnv=100, length.base=c(500,1e6)
 
 
   nSamples<-attr(x,"Samples")[2]
-  altered<-countAltered.i(chromosomes[selec], x, max.number.cnv, length.base, gen.info)
+  if (chr!=0)
+   altered<-countAltered.i(chromosomes[selec], x, max.number.cnv, length.base, gen.info, chromosomes)
+  else
+   {
+    altered<-countAltered.i(0, x, max.number.cnv, length.base, gen.info, 0)
+    if (NROW(altered$gains)>1)
+     names(altered$gains)<-c("pos","Freq")
+    if (NROW(altered$losses)>1)
+     names(altered$losses)<-c("pos","Freq")
+   }
+  
   gains<-altered$gains
   losses<-altered$losses  
 
@@ -123,7 +147,7 @@ plot.summaryParGADA<-function(x, chr, max.number.cnv=100, length.base=c(500,1e6)
 #
   par(mar = c(old.mar[1], old.mar[2], 0, old.mar[4]))
   size.ok<-nSamples/50
-  drawChromosome(chr,size=size.ok,ylim=c(1,nSamples),limits=limits,ylab="Individuals")
+  drawChromosome(chr, size=size.ok, ylim=c(1,nSamples), limits=limits, ylab="Individuals")
 
 
   thresholds<-c(-Inf,0,Inf)

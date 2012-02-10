@@ -1,6 +1,8 @@
 \name{getReducedData}
 \Rdversion{1.1}
 \alias{getReducedData}
+\alias{sortPopData}
+
 
 \title{
 Reduced matrix of CNV blocks across the whole genome
@@ -36,7 +38,8 @@ the whole subject sample, except for 1\% of the subjects.
 For \code{x}, concatenation by subject and chromosome, within a single population,
 is readily provided by the function \code{summary.parGADA} on an object \code{parGADA} 
 that has been previously segemnted. Population concatenation is the result of   
-\code{c(summary{parGADA1}), summary{parGADA2}), ...} across groups.
+\code{c(summary{parGADA1}), summary{parGADA2}), ...} across groups. Concatenation can be obtained with the function sortPopData(segments,nchr,npop), where segments is the output of GADA, nchr the number of chromosomes analyzed and npop the number of populations in the data set.
+
 }
 
 \value{
@@ -61,6 +64,11 @@ load("Hapmap270Cnv.RData")
 mat.f<-getReducedData(segments, gen.info, varSimil=0.99, subVariation=0.90)
 cnv.blocks<-attr(mat.f,"cnv.blocks")
 matrixPlot(mat.f)
+
+#if segments are available form gada output first sort data by populations then get reduced data.
+#segments<-sortPopData(segments,nchr,npop)
+#mat.f<-getReducedData(segments, gen.info, varSimil=0.99, subVariation=0.90)
+
 }
 
 }

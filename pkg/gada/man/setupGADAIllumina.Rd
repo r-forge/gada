@@ -8,7 +8,7 @@ This function encapsulates information obtained from Illumina platform (BeadStud
 }
 
 \usage{
-setupGADAIllumina(file, NumCols, log2ratioCol, MarkerIdCol = 1, ChrNameCol = 2, ChrPosCol = 3, sort = TRUE, orderProbes, saveGenInfo = TRUE)
+setupGADAIllumina(file, NumCols, log2ratioCol, MarkerIdCol = 1, ChrNameCol = 2, ChrPosCol = 3, XY=TRUE, sort = TRUE, orderProbes, saveGenInfo = TRUE)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ setupGADAIllumina(file, NumCols, log2ratioCol, MarkerIdCol = 1, ChrNameCol = 2, 
   \item{MarkerIdCol}{The column in 'file' containing the name of the marker}
   \item{ChrNameCol}{The column in 'file' containing the chromosome}
   \item{ChrPosCol}{The column in 'file' containing the genomic position}
+  \item{XY}{Do data have X and Y labels in annotation or 23 and 24? The default is TRUE}
   \item{sort}{Should data be sorted using annotation data? The default is TRUE}
   \item{orderProbes}{Used when sort is TRUE. See details}
   \item{saveGenInfo}{Should annotation data be saved? The default is TRUE. See details}

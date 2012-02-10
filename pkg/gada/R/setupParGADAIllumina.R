@@ -1,4 +1,4 @@
-setupParGADAIllumina<-function(folder, files, verbose=TRUE, sort=TRUE, ...)
+setupParGADAIllumina<-function(folder, files, XY=TRUE, verbose=TRUE, sort=TRUE, ...)
  {
  
   if (!"SBL"%in%dir() )
@@ -34,6 +34,13 @@ setupParGADAIllumina<-function(folder, files, verbose=TRUE, sort=TRUE, ...)
     gg<-scan("SBL/genomicInfo",skip=1,what="character")
     gg2<-matrix(gg,ncol=3,nrow=length(gg)/3,byrow=TRUE)
     gg2[,2][gg2[,2]=="XY"]<-"X"
+
+    if (!XY)
+     {
+      gg2[,2][gg2[,2]=="23"]<-"X"
+      gg2[,2][gg2[,2]=="24"]<-"X"
+     }
+
     temp<-data.frame(probe=gg2[,1], chr=factor(gg2[,2],levels=c(1:22,"X","Y")), pos=as.numeric(gg2[,3]),stringsAsFactors=FALSE) 
 
 # mitocondrial?
@@ -51,6 +58,13 @@ setupParGADAIllumina<-function(folder, files, verbose=TRUE, sort=TRUE, ...)
     gg<-scan("SBL/genomicInfo",skip=1,what="character")
     gg2<-matrix(gg,ncol=3,nrow=length(gg)/3,byrow=TRUE)
     gg2[,2][gg2[,2]=="XY"]<-"X"
+
+    if (!XY)
+     {
+      gg2[,2][gg2[,2]=="23"]<-"X"
+      gg2[,2][gg2[,2]=="24"]<-"X"
+     }
+
     temp<-data.frame(probe=gg2[,1], chr=factor(gg2[,2],levels=c(1:22,"X","Y")), pos=as.numeric(gg2[,3]),stringsAsFactors=FALSE) 
 
 # mitocondrial?
@@ -82,13 +96,13 @@ setupParGADAIllumina<-function(folder, files, verbose=TRUE, sort=TRUE, ...)
 
 
 
-  prepare.i<-function(i, files, ...)
+  prepare.i<-function(i, files, XY=XY, ...)
     {
       if (verbose)
        cat("  Importing array: ",files[i],"... ")  
 
       dd<-paste("rawData/",files[i],sep="")
-      temp<-setupGADAIllumina(dd, saveGenInfo=FALSE, ...)
+      temp<-setupGADAIllumina(dd, XY=XY, saveGenInfo=FALSE, ...)
 
       save(temp, file=paste("SBL/setupGADA",i,sep="" ), compress=TRUE)
 
@@ -97,7 +111,7 @@ setupParGADAIllumina<-function(folder, files, verbose=TRUE, sort=TRUE, ...)
     }
 
 
- res<-plapply(1:length(files), function(i) try(prepare.i(i, files=files, ...), TRUE))
+ res<-plapply(1:length(files), function(i) try(prepare.i(i, files=files, XY=XY, ...), TRUE))
 
  if (verbose)
   {
@@ -105,23 +119,25 @@ setupParGADAIllumina<-function(folder, files, verbose=TRUE, sort=TRUE, ...)
    cat("Creating objects of class setupGADA for all input files... done \n")
   }
 
-
-   error<-sum(unlist(lapply(res, function(x) inherits(x, "try-error"))))
+   fail<-unlist(lapply(res, function(x) inherits(x, "try-error")))
+   error<-sum(fail)
 
    if (error>0)
     {
       cat("WARNING!!! \n")
       cat("  Creating objects procedure failed for",sum(error),"samples \n")
       cat("  (type error to see what happened) \n")
+      cat(paste("    ", error, "files have been removed from the analysis \n"))
       error <<- res
+      class(error)<-"error.gada.setup"
     }
 
 
  ans<-getwd()
  class(ans)<-"parGADA"
  attr(ans,"type")<-"Illumina"
- attr(ans,"labels.samples")<-gsub("sample.","",gsub(".txt","",files))
- attr(ans,"Samples")<-length(files)
+ attr(ans,"labels.samples")<-gsub("sample.","",gsub(".txt","",files))[!fail]
+ attr(ans,"Samples")<-length(attr(ans,"labels.samples"))
  ans
 
 }

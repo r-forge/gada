@@ -7,7 +7,7 @@ get.chromosome.dat<-function(object, ch, gg, verbose=TRUE)
 
 	cnv.data<-lapply(1:length(object), function(x) object[[x]][[ch]])
 	cnv.data<-unlist(cnv.data,recursive=FALSE)
-	
 	mat<-get.matrix(cnv.data, probe.pos, verbose)
+
 }
 

@@ -13,7 +13,12 @@ print.summaryParGADA<-function(x, ...)
   CNVs<-list()
   tamanys<-NULL
 
-  for (i in 1:22)
+  chr<-attr(x, "chr")
+  n.chr<-length(chr)
+  if (n.chr>22)
+   n.chr<-22
+
+  for (i in 1:n.chr)
   # No cromosoma X Y -> Luego preparar por cromosoma
   {
    tt<-x[[i]]
@@ -71,7 +76,7 @@ print.summaryParGADA<-function(x, ...)
 
 
   ii<-t(data.frame(res[[5]]))
-  dimnames(ii)[[1]]<-paste("Chromosome",1:22)
+  dimnames(ii)[[1]]<-paste("Chromosome",1:n.chr)
   dimnames(ii)[[2]]<-c("segments", "Gains", "Losses")
 
   cat("\n")
@@ -83,4 +88,3 @@ print.summaryParGADA<-function(x, ...)
 
   invisible(res)
  }
-

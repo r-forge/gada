@@ -57,15 +57,16 @@ parSBL<-function(x, Samples, estim.sigma2, aAlpha=0.2, verbose=TRUE, ...)
      cat("Segmentation procedure for",Samples[2]-Samples[1]+1,"samples ...done \n")
 
 
-   error<-sum(unlist(lapply(res, function(x) inherits(x, "try-error"))))
+   fail<-unlist(lapply(res, function(x) inherits(x, "try-error")))
+   error<-sum(fail)
 
    if (error>0)
     {
       cat("WARNING!!! \n")
       cat("  Segmentation procedure failed for",sum(error),"samples \n")
       cat("  (type error to see what happened) \n")
+      cat(paste("    ", error, "files have been removed from the analysis \n"))
       error <<- res
+      class(error)<-"error.gada.sbl"
     }
-
-
  }

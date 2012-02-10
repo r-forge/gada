@@ -8,7 +8,7 @@ This function encapsulates information obtained from Affymetrix platform (APT or
 }
 
 \usage{
-setupGADAaffy(file, NumCols, log2ratioCol, MarkerIdCol = 1, ChrNameCol = 2, ChrPosCol = 3, sort = FALSE, orderProbes, saveGenInfo = TRUE)
+setupGADAaffy(file, NumCols, log2ratioCol, MarkerIdCol = 1, ChrNameCol = 2, ChrPosCol = 3, XY=TRUE, sort = FALSE, orderProbes, saveGenInfo = TRUE)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ setupGADAaffy(file, NumCols, log2ratioCol, MarkerIdCol = 1, ChrNameCol = 2, ChrP
   \item{MarkerIdCol}{The column in 'file' containing the name of the marker}
   \item{ChrNameCol}{The column in 'file' containing the chromosome}
   \item{ChrPosCol}{The column in 'file' containing the genomic position}
+  \item{XY}{Do data have X and Y labels in annotation or 23 and 24? The default is TRUE}
   \item{sort}{Should data be sorted using annotation data? The default is TRUE}
   \item{orderProbes}{Used when sort is TRUE. See details}
   \item{saveGenInfo}{Should annotation data be saved? The default is TRUE. See details}

@@ -1,5 +1,5 @@
 setupGADAaffy <-
-function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, sort=FALSE, orderProbes, saveGenInfo=TRUE)
+function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, XY=TRUE, sort=FALSE, orderProbes, saveGenInfo=TRUE)
  {  
     if (missing(log2ratioCol))
         stop("Missing log2ratioCol. Please, indicate which column of the file contains the log2ratio. \
@@ -30,15 +30,34 @@ function(file, NumCols, log2ratioCol, MarkerIdCol=1, ChrNameCol=2, ChrPosCol=3, 
 
 
     # Removing probes without chromosomes (i.e. Mitocondrial probes)
-    chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+      if (XY)
+       {
+        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+       }
+      else
+       {
+        x[,ChrNameCol][x[,ChrNameCol]=="23"]<-"X"
+        x[,ChrNameCol][x[,ChrNameCol]=="24"]<-"Y"
+        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+       }
+
     chrna<-is.na(chr)
     if (sum(chrna)>0)
       {
         warning("Extraneous chromosome names (e.g. 'M') have been removed")
         xx<-x[!chrna,]
         x<-xx   
-        chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
-      }
+        if (XY)
+         {
+          chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+         }
+        else
+         {
+          x[,ChrNameCol][x[,ChrNameCol]=="23"]<-"X"
+          x[,ChrNameCol][x[,ChrNameCol]=="24"]<-"Y"
+          chr<-factor(x[,ChrNameCol],levels=c(as.character(1:22),"X","Y"))
+         }
+       }
 
     
     if (!sort)
